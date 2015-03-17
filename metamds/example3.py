@@ -9,16 +9,16 @@ def run_simulation(simulation_ast_file, working_directory='.' ):
         ast = yaml.safe_load(f)
 
     # initialize renderer
-    renderer = Renderer(search_dirs=['../templates','../concepts', '../templates/python'])
+    renderer = Renderer(search_dirs=['../concepts', '../templates/python'])
 
     # generate code for hoomd
     rendered_code = renderer.render_ast(ast)
 
-    file_name='input.xml'
-    n_step = 10
+    file_name = 'input.data'
+    n_step = 1000
 
-    tmp_rendered_code_file_name ='tmp_rendered_code.py'
-    with file(tmp_rendered_code_file_name,'w') as f:
+    tmp_rendered_code_file_name = 'tmp_rendered_code.py'
+    with file(tmp_rendered_code_file_name, 'w') as f:
         f.write(rendered_code)
 
     execfile(tmp_rendered_code_file_name)

@@ -1,13 +1,8 @@
 __author__ = 'sallai'
 
-from attrdict import AttrDict
-from jinja2 import Template
-import jinja2
 from jinja2.runtime import StrictUndefined
 from jinja2 import Environment, FileSystemLoader
 import yaml
-import pystache
-import re
 
 
 class Renderer(object):

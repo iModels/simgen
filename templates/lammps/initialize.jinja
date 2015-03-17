@@ -1,0 +1,13 @@
+{% implements 'initialize.yaml' %}
+# -- initialize --
+# load the input file {{fileName}}
+{% include 'load.jinja' %}
+{% endwith %}
+
+# add lj params for atomtype 10
+{% with r_cut=3.0, atom_type_1='C', atom_type_2='C', epsilon=2.2, sigma=3.3 %}
+{% include 'lj_pair.jinja' %}
+{% endwith %}
+
+{% include 'statements.jinja' %}
+# -- end of initialize --

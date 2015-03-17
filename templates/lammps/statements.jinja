@@ -1,0 +1,5 @@
+{% implements 'statements.yaml' %}
+{% for statement in statements %}
+{{ ''|indent(indent|default(0), true) }}# generated code for statement <{{ statement.keys()[0] }}>
+{{ render(statement)|indent(indent|default(0), true) }}
+{% endfor %}

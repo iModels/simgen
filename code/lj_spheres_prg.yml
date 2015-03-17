@@ -1,7 +1,7 @@
 simulation:
-  target: hoomd
-  simulation_script_file_name: 'hoomd_sim_script.py'
-  simulator_executable: '/usr/local/bin/hoomd'
+  target: lammps
+  simulation_script_file_name: 'lammps.input'
+  simulator_executable: 'lmp_mpi'
   statements:
   - load:
       file_name: '{{file_name}}'

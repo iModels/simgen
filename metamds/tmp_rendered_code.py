@@ -1,36 +1,26 @@
 simulation_script = """
-# -- hoomd simulation
-from hoomd_script import *
+# -- simulation
+units		lj
+dimension	3
+atom_style	full
+
 # generated code for statement <load>
-init.read_xml('{{file_name}}')
+read_data {{file_name}}
 # generated code for statement <lj_pair>
-try:
-    lj
-except NameError:
-    lj = pair.lj(r_cut=2.5)
-
-lj.pair_coeff.set('A', 'A', epsilon=1.0, sigma=1.0)
+pair_style	lj/cut 2.5
+pair_coeff A A 1.0 1.0 2.5
 # generated code for statement <lj_pair>
-try:
-    lj
-except NameError:
-    lj = pair.lj(r_cut=2.5)
-
-lj.pair_coeff.set('A', 'B', epsilon=1.0, sigma=1.0)
+pair_style	lj/cut 2.5
+pair_coeff A B 1.0 1.0 2.5
 # generated code for statement <lj_pair>
-try:
-    lj
-except NameError:
-    lj = pair.lj(r_cut=2.5)
-
-lj.pair_coeff.set('B', 'B', epsilon=1.0, sigma=1.0)
+pair_style	lj/cut 2.5
+pair_coeff B B 1.0 1.0 2.5
 # generated code for statement <nvt>
-integrate.mode_standard(dt=0.005)
-integrator = integrate.nvt(group=group.all(), T=1.2, tau=0.5)
+fix integrator all nvt temp 1.2 1.2 0.5
 # generated code for statement <step>
-run({{n_step}})
+run {{n_step}}
 # disable the integrator
-integrator.disable()
+unfix integrator
 # -- end simulation"""
 
 # resolve variables in simulation script using locals and globals
@@ -42,8 +32,9 @@ simulation_script_template = env.from_string(simulation_script)
 simulation_script = simulation_script_template.render(dict(globals(), **locals()))
 
 # save simulation script to file
-with open('hoomd_sim_script.py', 'w') as f:
+with open('lammps.input', 'w') as f:
     f.write(simulation_script)
 
 from subprocess import call
-call(['/usr/local/bin/hoomd', 'hoomd_sim_script.py'])
+call(['lmp_mpi', '-in', 'lammps.input',
+      '-log', 'lammps.log'])
