@@ -1,0 +1,10 @@
+{% implements 'simulation_script.yaml' %}
+# -- simulation
+units		lj
+dimension	2
+atom_style	atomic
+
+{% with indent=0 %}
+{% include 'statements.mustache' %}
+{% endwith %}
+# -- end simulation

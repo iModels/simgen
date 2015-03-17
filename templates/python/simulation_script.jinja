@@ -1,0 +1,4 @@
+{# change template path and reload simulation.mustache from there #}
+{% pushtemplatepath '../'+target %}
+{% include 'simulation_script.jinja' %}
+{% poptemplatepath %}

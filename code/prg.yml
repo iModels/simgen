@@ -1,0 +1,19 @@
+name: statements
+statements:
+  - name: literal
+    value: "x=1+2+3"
+  - name: count
+    with: j
+    from: 0
+    to: 10
+    by: 1
+    statements:
+    - name: repeat
+      condition: "True"
+      statements:
+      - name: for
+        item_id: i
+        list: "[6, 7, 8]"
+        statements:
+        - name: print
+          text: "hello world!"

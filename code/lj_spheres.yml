@@ -1,0 +1,23 @@
+simulation:
+  target: hoomd
+  statements:
+  - initialize:
+      fileName: 'hello.txt'
+      statements:
+        - step:
+            num_steps: 2000000
+  - load:
+      file_name: '{{file_name}}'
+  - lj_pair:
+      r_cut: 2.5
+      atom_type_1: 'A'
+      atom_type_2: 'A'
+      epsilon: 1.0
+      sigma: 1.0
+  - nvt:
+      dt: 0.005
+      T: 1.2
+      tau: 0.5
+      statements:
+        - step:
+            num_steps: '{{n_step}}'

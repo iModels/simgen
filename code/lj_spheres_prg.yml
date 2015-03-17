@@ -1,0 +1,32 @@
+simulation:
+  target: hoomd
+  simulation_script_file_name: 'hoomd_sim_script.py'
+  simulator_executable: '/usr/local/bin/hoomd'
+  statements:
+  - load:
+      file_name: '{{file_name}}'
+  - lj_pair:
+      r_cut: 2.5
+      atom_type_1: 'A'
+      atom_type_2: 'A'
+      epsilon: 1.0
+      sigma: 1.0
+  - lj_pair:
+      r_cut: 2.5
+      atom_type_1: 'A'
+      atom_type_2: 'B'
+      epsilon: 1.0
+      sigma: 1.0
+  - lj_pair:
+      r_cut: 2.5
+      atom_type_1: 'B'
+      atom_type_2: 'B'
+      epsilon: 1.0
+      sigma: 1.0
+  - nvt:
+      dt: 0.005
+      T: 1.2
+      tau: 0.5
+      statements:
+        - step:
+            num_steps: '{{n_step}}'

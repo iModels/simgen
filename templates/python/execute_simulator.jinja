@@ -1,0 +1,4 @@
+{# change template path and reload template from there #}
+{% pushtemplatepath '../'+target %}
+{% include 'execute_simulator.jinja' %}
+{% poptemplatepath %}

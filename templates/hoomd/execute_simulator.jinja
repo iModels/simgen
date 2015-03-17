@@ -1,0 +1,3 @@
+{% implements 'execute_simulation.yaml' %}
+from subprocess import call
+call(['{{ simulator_executable }}', '{{ simulation_script_file_name }}'])

@@ -1,0 +1,14 @@
+description: "set up NVT integrator"
+properties:
+  - dt:
+      type: number
+  - T:
+      type: number
+  - tau:
+      type: number
+  - statements:
+      description: list of statements to be executed with the NVT being set up
+      type: list
+      items:
+        type: [ statement ]
+reqired: [dt, T, tau, statements]

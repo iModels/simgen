@@ -1,0 +1,7 @@
+{% implements 'simulation_script.yaml' %}
+# -- hoomd simulation
+from hoomd_script import *
+{% with indent=0 %}
+{% include 'statements.jinja' %}
+{% endwith %}
+# -- end simulation
