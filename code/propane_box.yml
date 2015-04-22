@@ -1,0 +1,23 @@
+simulation:
+  target: lammps
+  simulation_script_file_name: 'lammps.input'
+  simulator_executable: 'lammps'
+  statements:
+  - mbuild_load:
+      compound: mbuild.examples.Alkane
+      arguments:
+        - arg:
+            name: n
+            value: 5
+  - minimize:
+      max_steps: 100
+      max_energy_eval: 1000
+      energy_tolerance: 0.0001
+      force_tolerance: 0.000001
+  - nvt:
+      dt: 0.005
+      T: 1.2
+      tau: 0.5
+      statements:
+        - step:
+            num_steps: '{{n_step}}'

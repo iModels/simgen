@@ -4,17 +4,10 @@ units		lj
 dimension	3
 atom_style	full
 
-# generated code for statement <load>
-read_data {{file_name}}
-# generated code for statement <lj_pair>
-pair_style	lj/cut 2.5
-pair_coeff A A 1.0 1.0 2.5
-# generated code for statement <lj_pair>
-pair_style	lj/cut 2.5
-pair_coeff A B 1.0 1.0 2.5
-# generated code for statement <lj_pair>
-pair_style	lj/cut 2.5
-pair_coeff B B 1.0 1.0 2.5
+# generated code for statement <mbuild_load>
+% this is the simulation script code that makes use of the generated files
+# generated code for statement <minimize>
+minimize 100 1000 0.0001 1e-06
 # generated code for statement <nvt>
 fix integrator all nvt temp 1.2 1.2 0.5
 # generated code for statement <step>
@@ -36,5 +29,5 @@ with open('lammps.input', 'w') as f:
     f.write(simulation_script)
 
 from subprocess import call
-call(['lmp_mpi', '-in', 'lammps.input',
+call(['lammps', '-in', 'lammps.input',
       '-log', 'lammps.log'])

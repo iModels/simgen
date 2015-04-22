@@ -1,0 +1,11 @@
+description: "minimize"
+properties:
+  - max_steps:
+      type: number
+  - max_energy_eval:
+      type: number
+  - energy_tolerance:
+      type: number
+  - force_tolerance:
+      type: number
+reqired: [max_steps, max_energy_eval, energy_tolerance, force_tolerance]
