@@ -1,5 +1,5 @@
 description: "loads an input file"
 properties:
-  - file_name:
+  file_name:
       type: string
 required: [file_name]

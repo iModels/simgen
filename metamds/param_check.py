@@ -1,6 +1,8 @@
 import os
+from pandas import json
 import re
 from jinja2.exceptions import TemplateNotFound, TemplateSyntaxError
+from jinja2.runtime import Context
 import yaml
 
 __author__ = 'sallai'
@@ -71,15 +73,30 @@ class ParamCheckExtension(Extension):
         return True
 
     def _param_check(self, schema_filename, context, caller):
+        error = None
+        schema = None
+        for extension in ['', '.yaml', '.yml', '.json']:
+            try:
+                contents, filename, uptodate = context.environment.loader.get_source(context.environment, schema_filename+extension)
+                schema_filename = schema_filename+extension
+                if schema_filename.endswith('.json'):
+                    schema = json.loads(contents)
+                else:
+                    schema = yaml.safe_load(contents)
+                break
+            except TemplateNotFound as e:
+                error = e
 
-        contents, filename, uptodate = context.environment.loader.get_source(context.environment, schema_filename)
+        if not schema:
+            error.name = error.message = "Could not load {}[.yaml|.yml|.json]?".format(schema_filename)
+            raise error
 
-        schema = yaml.safe_load(contents)
+        # TODO: make sure schema is well-formed, e.g. by using Rx (http://rx.codesimply.com/)
+        # and raise some meaningful exceptions (SyntaxError) otherwise
 
-        # TODO: make sure schema is well-formed
-
-        for param in schema['properties']:
-            for param_name, param_properties in param.iteritems():
+        for param_name, param_properties in schema['properties'].iteritems():
+            # print "*** param: {}".format(param)
+            # for param_name, param_properties in param.iteritems():
                 if 'type' in param_properties:
                     param_type = param_properties['type']
                 else:

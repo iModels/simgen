@@ -1,7 +1,7 @@
 description: "list of statements"
 type: statement
 properties:
-  - statements:
+  statements:
       description: list of statements
       type: list
       items:
