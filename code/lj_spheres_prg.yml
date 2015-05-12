@@ -1,7 +1,7 @@
 simulation:
   target: lammps
   simulation_script_file_name: 'lammps.input'
-  simulator_executable: 'lmp_mpi'
+  simulator_executable: 'lammps'
   statements:
   - load:
       file_name: '{{file_name}}'

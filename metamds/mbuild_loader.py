@@ -67,8 +67,8 @@ class MbuildLoaderExtension(Extension):
 
         compound_module = importlib.import_module(compound_module_name, package=None)
 
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
         compound_class = getattr(compound_module, compound_class_name[1:])
 

@@ -29,5 +29,4 @@ with open('lammps.input', 'w') as f:
     f.write(simulation_script)
 
 from subprocess import call
-call(['lammps', '-in', 'lammps.input',
-      '-log', 'lammps.log'])
+call(['lammps', '-in', 'lammps.input','-log', 'lammps.log'])

@@ -1,4 +1,4 @@
 description: "initializes the simulation"
 properties:
-  - fileName:
+  fileName:
       type: string

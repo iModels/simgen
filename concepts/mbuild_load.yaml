@@ -1,8 +1,8 @@
 description: "loads an mbuild compound"
 properties:
-  - compound:
+  compound:
       type: string
-  - arguments:
+  arguments:
       description: "list of constructor arguments"
       type: list
       items:

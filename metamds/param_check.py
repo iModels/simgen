@@ -94,6 +94,9 @@ class ParamCheckExtension(Extension):
         # TODO: make sure schema is well-formed, e.g. by using Rx (http://rx.codesimply.com/)
         # and raise some meaningful exceptions (SyntaxError) otherwise
 
+       # import ipdb
+       #  ipdb.set_trace()
+
         for param_name, param_properties in schema['properties'].iteritems():
             # print "*** param: {}".format(param)
             # for param_name, param_properties in param.iteritems():
