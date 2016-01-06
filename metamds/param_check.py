@@ -135,7 +135,7 @@ class ParamCheckExtension(Extension):
                 if not param_exists and param_default:
                     param_exists = True
                     param_value = param_default
-                    context[param_name] = param_value
+                    context.vars[param_name] = param_value
 
                 # check if param exists
                 if param_required and not param_exists:
