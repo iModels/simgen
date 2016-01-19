@@ -8,7 +8,7 @@ with file('../code/lj_spheres.yml', 'r') as f:
     ast = yaml.safe_load(f)
 
 # initialize renderer
-renderer = Renderer(search_dirs=['../templates','../concepts','../templates/python'])
+renderer = Renderer(search_path=['../templates', '../concepts', '../templates/python'])
 
 # generate code for hoomd
 rendered_code = renderer.render_ast(ast)

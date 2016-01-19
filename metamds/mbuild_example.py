@@ -9,7 +9,7 @@ def run_simulation(simulation_ast_file, working_directory='.' ):
         ast = yaml.safe_load(f)
 
     # initialize renderer
-    renderer = Renderer(search_dirs=['../concepts', '../templates/python'])
+    renderer = Renderer(search_path=['../concepts', '../templates/python'])
 
     # generate code for hoomd
     rendered_code = renderer.render_ast(ast)
