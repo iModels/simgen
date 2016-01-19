@@ -1,7 +1,7 @@
 import os
 import re
 from tempfile import mktemp, mkdtemp
-
+import searchpath
 GITHUB_URL_PATTERN = r'https://(?P<domain>.+?)/(?P<owner>.+?)/(?P<repo>.+?)(.git)?(?P<path>/.+)?$'
 _PATTERN = re.compile(GITHUB_URL_PATTERN)
 
@@ -141,17 +141,16 @@ def mixed_to_local_path(mixed_path, local_root_dir=None):
     return local_path
 
 
-def find_in_mixed_path(file_name, mixed_path, local_root_dir=None, match_func=os.path.exists):
-
+def find_file(seekName, mixed_path, implicitExt='', local_root_dir=None):
+    """Given a pathsep-delimited path string or list of directories or github URLs, find seekName.
+    Returns path to seekName if found, otherwise None.
+    Also allows for files with implicit extensions (eg, .exe, or ['.yml','.yaml']),
+    returning the absolute path of the file found.
+    >>> find_file('ls', '/usr/bin:/bin', implicitExt='.exe')
+    '/bin/ls'
+    """
     local_path = mixed_to_local_path(mixed_path, local_root_dir)
-    print('Local path: {}'.format(local_path))
-    for dirname in local_path:
-        candidate = os.path.join(dirname, file_name)
-        print('Testing {}'.format(candidate))
-        if match_func(candidate):
-            return candidate
-
-    raise Error("Can't find file {} in path {}".format(file_name, mixed_path))
+    return searchpath.find_file(seekName, local_path, implicitExt)
 
 
 if __name__ == '__main__':

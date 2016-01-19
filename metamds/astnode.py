@@ -1,9 +1,9 @@
 import os
 import re
 
-from metamds.dict_merge import data_merge
-from metamds.searchpath import find_file
-from metamds.marked_yaml import marked_load as safe_load
+from dict_merge import data_merge
+from searchpath import find_file
+from marked_yaml import marked_load as safe_load
 
 class NodeTypeSyntaxError(Exception):
     """Raised to tell the user that there is a problem with the node type."""
@@ -80,7 +80,7 @@ class NodeType(object):
             fn = find_file(mapping_or_filename, search_path, extensions)
 
             if not fn:
-                raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, extensions.join('|')), search_path))
+                raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, '|'.join(extensions)), search_path))
 
             nodetype_name = os.path.basename(fn)
             nodetype_name = nodetype_name.split('.')[0]
@@ -139,24 +139,24 @@ class AstNode(object):
                 mapping_or_filename = safe_load(f)
                 # mapping_or_filename['file_name'] = fn
 
-        self.ast = mapping_or_filename
+        self.mapping = mapping_or_filename
 
     @property
     def nodetype_name(self):
-        return self.ast.keys().pop(0)
+        return self.mapping.keys().pop(0)
 
     @property
     def properties(self):
-        return self.ast[self.nodetype_name].keys()
+        return self.mapping[self.nodetype_name].keys()
 
     def set_property(self, n, v):
-        self.ast[self.nodetype_name][n]=v
+        self.mapping[self.nodetype_name][n]=v
 
     def get_property(self, n):
-        return self.ast[self.nodetype_name][n]
+        return self.mapping[self.nodetype_name][n]
 
     def merge(self, dict_to_merge):
-        self.ast = data_merge(self.ast, dict_to_merge)
+        self.mapping = data_merge(self.mapping, dict_to_merge)
 
     def type_check(self, param_name, nodetype):
         param_value = self.get_property(param_name)
@@ -192,7 +192,7 @@ class AstNode(object):
 
     def validate(self):
 
-        if sum(1 for _ in self.ast.keys()) != 1:
+        if sum(1 for _ in self.mapping.keys()) != 1:
             raise AstSyntaxError('Ast node must have exactly one root element', filename=filename, lineno=1)
 
         nodetype = NodeType(self.nodetype_name, self.search_path)

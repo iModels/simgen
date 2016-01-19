@@ -15,6 +15,6 @@ ast.validate()
 renderer = Renderer(search_path=['../templates', '../concepts', '../templates/lammps'])
 
 # generate code for hoomd
-rendered_code = renderer.render_ast(ast.ast)
+rendered_code = renderer.render_ast(ast.mapping)
 
 print rendered_code

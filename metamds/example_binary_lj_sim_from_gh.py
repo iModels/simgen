@@ -2,8 +2,9 @@ import logging
 
 import yaml
 
-from ghsync import find_in_mixed_path
+from ghsync import find_file
 from ghsync import mixed_to_local_path
+from astnode import AstNode
 from renderer import Renderer
 
 OFFLINE=True
@@ -30,13 +31,15 @@ else:
 
 program = 'binary_lj_sim_prg.yml'
 
-program_file = find_in_mixed_path(program, local_code_path, local_root_dir='/tmp')
+program_file = find_file(program, local_code_path, local_root_dir='/tmp')
 
 print('Found program file: {}'.format(program_file))
 
-# load the abstract syntax tree
-with file(program_file, 'r') as f:
-    ast = yaml.safe_load(f)
+# load ast
+ast = AstNode(program_file, search_path=local_concept_path)
+
+# validate
+ast.validate()
 
 # initialize renderer
 renderer = Renderer(search_dirs=local_template_path+local_concept_path)
@@ -45,11 +48,3 @@ renderer = Renderer(search_dirs=local_template_path+local_concept_path)
 rendered_code = renderer.render_ast(ast)
 
 print rendered_code
-
-# # set the target of the simulation node to lammps (it was set to hoomd in the input file)
-# ast['target'] = 'lammps'
-#
-# # generate code for lammps
-# print renderer.render_ast(ast)
-#
-

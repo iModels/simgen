@@ -1,5 +1,7 @@
 import logging
 
+from astnode import AstNode
+
 __author__ = 'sallai'
 
 from jinja2.runtime import StrictUndefined
@@ -20,9 +22,9 @@ class Renderer(object):
         return render
 
     def render_ast(self, ast, template_search_dirs=None):
-        ast_node_type = ast.keys()[0]
-        template = self.env.get_template (ast_node_type+'.jinja')
-        return template.render(ast[ast_node_type])
+        assert isinstance(ast, AstNode)
+        template = self.env.get_template (ast.nodetype_name+'.jinja')
+        return template.render(ast.mapping[ast.nodetype_name])
 
     def render_file(self, ast_yaml_filename, template_search_dirs=None):
         f = file(ast_yaml_filename, 'r')

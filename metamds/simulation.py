@@ -23,7 +23,7 @@ class Simulation(object):
         renderer = Renderer(search_path=search_path)
 
         # generate code
-        self.rendered_code = renderer.render_ast(ast.ast)
+        self.rendered_code = renderer.render_ast(ast.mapping)
 
         return self.rendered_code
 
