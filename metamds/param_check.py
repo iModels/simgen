@@ -17,12 +17,6 @@ class ParamCheckExtension(Extension):
     def __init__(self, environment):
         super(ParamCheckExtension, self).__init__(environment)
 
-        # # add the defaults to the environment
-        # environment.extend(
-        #     fragment_cache_prefix='',
-        #     fragment_cache=None
-        # )
-
     def parse(self, parser):
         token = next(parser.stream)
         if token.value == 'implements':

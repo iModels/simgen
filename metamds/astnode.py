@@ -1,6 +1,7 @@
 import os
 import re
 
+from metamds.dict_merge import data_merge
 from metamds.searchpath import find_file
 from metamds.marked_yaml import marked_load as safe_load
 
@@ -132,7 +133,7 @@ class AstNode(object):
             fn = find_file(mapping_or_filename, search_path, extensions)
 
             if not fn:
-                raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, extensions.join('|')), search_path))
+                raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, '|'.join(extensions)), search_path))
 
             with file(fn, 'r') as f:
                 mapping_or_filename = safe_load(f)
@@ -153,6 +154,9 @@ class AstNode(object):
 
     def get_property(self, n):
         return self.ast[self.nodetype_name][n]
+
+    def merge(self, dict_to_merge):
+        self.ast = data_merge(self.ast, dict_to_merge)
 
     def type_check(self, param_name, nodetype):
         param_value = self.get_property(param_name)
@@ -189,18 +193,14 @@ class AstNode(object):
     def validate(self):
 
         if sum(1 for _ in self.ast.keys()) != 1:
-            print("Ast node must have exactly one root element")
-            return False
-
-        print(self.nodetype_name)
+            raise AstSyntaxError('Ast node must have exactly one root element', filename=filename, lineno=1)
 
         nodetype = NodeType(self.nodetype_name, self.search_path)
 
         # check existence of required attrs
         for req_attr in nodetype.required_properties:
             if req_attr not in self.properties:
-                print("Ast node does not have required attribute {}".format(req_attr))
-                return False
+                raise AstSyntaxError("Ast node does not have required attribute {}".format(req_attr), filename=filename, lineno=1)
 
         # inject defaults
         for attr in nodetype.properties:
@@ -219,7 +219,6 @@ class AstNode(object):
             if isinstance(self.get_property(attr), dict):
                 ast = AstNode(self.get_property(attr))
                 ast.validate()
-
         return True
 
 if __name__ == '__main__':

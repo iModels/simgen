@@ -1,3 +1,4 @@
+# from https://gist.github.com/dagss/5008118
 """
 A PyYAML loader that annotates position in source code.
 The loader is based on `SafeConstructor`, i.e., the behaviour of
@@ -78,7 +79,6 @@ class MarkedLoader(Reader, Scanner, Parser, Composer, NodeConstructor, Resolver)
 
 def marked_load(stream):
     return MarkedLoader(stream).get_single_data()
-
 
 def test_marked_yaml():
     def loc(obj):

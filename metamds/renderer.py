@@ -14,6 +14,11 @@ class Renderer(object):
         self.env = Environment(loader=FileSystemLoader(search_dirs), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'param_check.ParamCheckExtension', 'mbuild_loader.MbuildLoaderExtension', 'redirect.RedirectExtension'], trim_blocks=True, cache_size=0)
         self.env.globals['render'] = self._make_render()
 
+    def _make_render(self):
+        def render(mapping):
+            return self.render_ast(mapping)
+        return render
+
     def render_ast(self, ast, template_search_dirs=None):
         ast_node_type = ast.keys()[0]
         template = self.env.get_template (ast_node_type+'.jinja')
@@ -29,13 +34,4 @@ class Renderer(object):
     def render_string(self, ast_yaml_string, template_search_dirs=None):
         mapping = yaml.safe_load(ast_yaml_string)
         return self.render_ast(mapping, template_search_dirs=template_search_dirs)
-
-    def _make_render(self):
-        def render(mapping):
-            return self.render_ast(mapping)
-        return render
-
-#
-# if __name__ == '__main__':
-#     print Renderer(search_dirs=['../templates','../concepts']).render_file('../code/lj_spheres.yml')
 
