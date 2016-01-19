@@ -1,13 +1,17 @@
+import logging
+
 __author__ = 'sallai'
 
 from jinja2.runtime import StrictUndefined
 from jinja2 import Environment, FileSystemLoader
 import yaml
 
+log = logging.getLogger(__file__)
 
 class Renderer(object):
     def __init__(self, search_dirs=None):
-        self.env = Environment(loader=FileSystemLoader(search_dirs), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'param_check.ParamCheckExtension', 'mbuild_loader.MbuildLoaderExtension'], trim_blocks=True, cache_size=0)
+        log.info('Search dirs: {}'.format(search_dirs))
+        self.env = Environment(loader=FileSystemLoader(search_dirs), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'param_check.ParamCheckExtension', 'mbuild_loader.MbuildLoaderExtension', 'redirect.RedirectExtension'], trim_blocks=True, cache_size=0)
         self.env.globals['render'] = self._make_render()
 
     def render_ast(self, ast, template_search_dirs=None):
