@@ -20,7 +20,7 @@ def resolve_file_name(candidate, implicitExt=''):
             return candidate
     return None
 
-def find_file(seekName, path, implicitExt=''):
+def find_file(seekName, path, implicitExt='', allow_absolute=False):
     """Given a pathsep-delimited path string or list of directories, find seekName.
     Returns path to seekName if found, otherwise None.
     Also allows for files with implicit extensions (eg, .exe, or ['.yml','.yaml']),
@@ -28,10 +28,11 @@ def find_file(seekName, path, implicitExt=''):
     >>> find_file('ls', '/usr/bin:/bin', implicitExt='.exe')
     '/bin/ls'
     """
-    fn = resolve_file_name(seekName, implicitExt=implicitExt)
-    if fn:
-        # Already absolute path.
-        return fn
+    if allow_absolute:
+        fn = resolve_file_name(seekName, implicitExt=implicitExt)
+        if fn:
+            # Already absolute path.
+            return fn
     if isinstance(path, (list, tuple)):
         path_parts = path
     else:

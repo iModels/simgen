@@ -1,3 +1,4 @@
+# binary_lj_sim.jinja start
 {% redirect 'minim.mdp' %}
 ; minim.mdp - used as input into grompp to generate em.tpr
 integrator	= steep		; Algorithm (steep = steepest descent minimization)
@@ -14,7 +15,6 @@ rcoulomb	    = 1.0		; Short-range electrostatic cut-off
 rvdw		    = 1.0		; Short-range Van der Waals cut-off
 pbc		        = xyz 		; Periodic Boundary Conditions (yes/no)
 {% endredirect %}
-
 {% redirect 'nvt.mdp' %}
 comm_mode       = linear
 integrator      = md
@@ -43,7 +43,6 @@ tau_t           = 1.0
 
 pcoupl          = no
 {% endredirect %}
-
 {% redirect 'sim.sh' %}
 #!/bin/sh
 
@@ -59,3 +58,4 @@ gmx grompp -f nvt.mdp -c em.gro -p {{system_name}}.top -o nvt.tpr
 # mdrun nvt
 gmx mdrun -v -deffnm nvt
 {% endredirect %}
+# binary_lj_sim.jinja end

@@ -1,5 +1,6 @@
 import os
 import re
+from pprint import pformat
 
 from dict_merge import data_merge
 from searchpath import find_file
@@ -73,11 +74,11 @@ class AstSyntaxError(Exception):
 
 
 class NodeType(object):
-    def __init__(self, mapping_or_filename, search_path=''):
+    def __init__(self, mapping_or_filename, session, search_path=''):
         if isinstance(mapping_or_filename, basestring):
 
             extensions = ['','.yml','.yaml']
-            fn = find_file(mapping_or_filename, search_path, extensions)
+            fn = session.find_file(mapping_or_filename, search_path, extensions)
 
             if not fn:
                 raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, '|'.join(extensions)), search_path))
@@ -125,12 +126,13 @@ class NodeType(object):
 
 
 class AstNode(object):
-    def __init__(self, mapping_or_filename, search_path=''):
+    def __init__(self, mapping_or_filename, session, search_path=[]):
+        self.session = session
         self.search_path = search_path
         if isinstance(mapping_or_filename, basestring):
 
             extensions = ['', '.yml', '.yaml']
-            fn = find_file(mapping_or_filename, search_path, extensions)
+            fn = self.session.find_file(mapping_or_filename, search_path, extensions)
 
             if not fn:
                 raise IOError('Cannot find file {} in path {}'.format("{}[{}]".format(mapping_or_filename, '|'.join(extensions)), search_path))
@@ -195,7 +197,7 @@ class AstNode(object):
         if sum(1 for _ in self.mapping.keys()) != 1:
             raise AstSyntaxError('Ast node must have exactly one root element', filename=filename, lineno=1)
 
-        nodetype = NodeType(self.nodetype_name, self.search_path)
+        nodetype = NodeType(self.nodetype_name, self.session, self.search_path)
 
         # check existence of required attrs
         for req_attr in nodetype.required_properties:
@@ -220,6 +222,10 @@ class AstNode(object):
                 ast = AstNode(self.get_property(attr))
                 ast.validate()
         return True
+
+    def __repr__(self):
+        return "AstNode(nodetype.name={}, ast={})".format(self.nodetype_name, pformat(self.mapping))
+
 
 if __name__ == '__main__':
 
