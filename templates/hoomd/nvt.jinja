@@ -1,6 +1,0 @@
-{% implements 'nvt' %}
-integrate.mode_standard(dt={{dt}})
-integrator = integrate.nvt(group=group.all(), T={{T}}, tau={{tau}})
-{% include 'statements.jinja' %}
-# disable the integrator
-integrator.disable()

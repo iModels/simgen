@@ -1,0 +1,9 @@
+{# save the compound that is part of the Ast #}
+{%  save_compound compound system_name+'.gro' forcefield %}
+
+{# generate the simulation code that loads the compound #}
+# call gromp on em
+gmx grompp -f em.mdp -c {{system_name}}.gro -p {{system_name}}.top -o em.tpr
+
+# mdrun em
+gmx mdrun -v -deffnm em

@@ -1,0 +1,14 @@
+# description of the 'load_compound' ast node type
+#
+description: "load compound"
+# ast node properties
+properties:
+  compound:
+      type: object
+  forcefield:
+      type: string
+      default: OPLS-aa
+  system_name:
+      type: string
+      default: system
+required: [compound]

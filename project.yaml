@@ -1,4 +1,9 @@
-title: simgen
+# This is the simgen project configuration file for the test project
+
+# Specify project title
+title: SimGen Test Project
+
+# Specify project search path
 path:
  - https://github.com/iModels/simgen/code
  - https://github.com/iModels/simgen/concepts

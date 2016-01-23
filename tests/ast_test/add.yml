@@ -1,0 +1,13 @@
+# description of the 'add' ast node type
+#
+description: "addition"
+# ast node properties
+properties:
+  # expression 1 is of type 'number' or 'add' (the type defined in this file)
+  expr1:
+      type: [add, number]
+  # expression 2 is of type 'number' or 'add', as well
+  expr2:
+      type: [add, number]
+# both expr1 and expr2 are required properties
+required: [expr1, expr2]

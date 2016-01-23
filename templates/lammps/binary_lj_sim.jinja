@@ -1,9 +1,0 @@
-{% implements 'binary_lj_sim' %}
-units             lj
-atom_style        atomic
-read_data {{system_name}}.lmp
-pair_style        lj/cut {{r_cut}}
-fix all nvt temp {{T}} {{T}} {{tau}}
-dump 1 all dcd 100 {{system_name}}.dcd
-dump 2 all molfile 1000 {{system_name}}.final.pdb pdb
-run {{steps}}

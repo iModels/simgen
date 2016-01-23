@@ -1,0 +1,15 @@
+# let's define the ast of the expression add(1,add(2,3))
+
+# root node is 'add', the name of the ast node type
+add:
+  # according to add.yml, 'add' nodes must have 'expr1' and 'expr2' properties defined
+
+  # expr1 is a number
+  expr1: 1
+
+  # expr2 is an ast node of type 'add'
+  expr2:
+    # define an 'add' node with 'expr1' 2 and 'expr2' 3
+    add:
+      expr1: 2
+      expr2: 3

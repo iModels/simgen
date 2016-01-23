@@ -1,7 +1,0 @@
-{% implements 'lj_pair' %}
-try:
-    lj
-except NameError:
-    lj = pair.lj(r_cut={{r_cut}})
-
-lj.pair_coeff.set('{{atom_type_1}}', '{{atom_type_2}}', epsilon={{epsilon}}, sigma={{sigma}})

@@ -1,0 +1,4 @@
+load_compound:
+  compound: '{{ ethane_box }}'
+  forcefield: opls
+  system_name: system
