@@ -22,7 +22,7 @@ def run():
     offline_project_manifest = os.path.join(dirname(__file__), '..', '..', 'res', 'mbuild_test', 'offline_project.yaml')
     project = Project(offline_project_manifest)
 
-    generated_code = project.render('prg', output_dir='generated_code', inject_dict={'ethane_box': ethane_box})
+    generated_code = project.render('prg', output_dir='./generated_code', inject_dict={'ethane_box': ethane_box})
 
     print("Generated code:\n {}".format(generated_code))
     print("Additional files have been saved to: ./generated_code")

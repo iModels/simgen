@@ -20,7 +20,7 @@ def run():
     # # initialize a project
     project = Project('https://github.com/imodels/simgen/res/binary_lj_sim/online_project.yaml', loader)
 
-    generated_code = project.render('binary_lj_sim_prg', output_dir='generated_code')
+    generated_code = project.render('binary_lj_sim_prg', output_dir='./generated_code')
 
     print("Generated code:\n {}".format(generated_code))
     print("Additional files have been saved to: ./generated_code")

@@ -245,6 +245,8 @@ class Loader(object):
         # remember the github to local path mapping
         self.add_repo(repo_url, local_repo_path)
 
+        os.chdir(cwd)
+
         return local_repo_path
 
     def mixed_to_local_path(self, mixed_path):

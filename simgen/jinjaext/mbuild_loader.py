@@ -3,6 +3,8 @@ import re
 from jinja2.exceptions import TemplateNotFound, TemplateSyntaxError
 import yaml
 
+from simgen.utils import mkdirs
+
 __author__ = 'sallai'
 from jinja2 import nodes
 from jinja2.ext import Extension
@@ -45,6 +47,8 @@ class MbuildLoaderExtension(Extension):
 
         import mbuild as mb
         if isinstance(compound, mb.Compound):
+            system_name = os.path.join(self.environment.globals['output_dir'], system_name)
+            mkdirs.mkdirs(system_name, exists_ok=True)
             compound.save(system_name, forcefield=forcefield, overwrite=True)
         else:
             import pdb; pdb.set_trace()
