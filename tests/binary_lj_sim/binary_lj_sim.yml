@@ -1,0 +1,22 @@
+description: "fixed-temperature NVT simulation of binary LJ system"
+properties:
+  r_cut:
+      description: "LJ cutoff radius"
+      type: number
+      default: 3
+  system_name:
+      description: "filename of the input system, without extension"
+      type: string
+  T:
+      description: "temperature"
+      type: number
+      default: 1
+  tau:
+      description: "update period"
+      type: number
+      default: 1
+  steps:
+      description: "number of steps to run simulation"
+      type: number
+      default: 1000
+required: [system_name]

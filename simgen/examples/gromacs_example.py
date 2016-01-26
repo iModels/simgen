@@ -1,6 +1,7 @@
 # This example demonstrates how to generate multiple files from a single AST
 import logging
 import os
+from tempfile import mktemp, mkdtemp
 
 from simgen.ghsync import Loader
 from simgen.project import Project
@@ -15,7 +16,7 @@ def run():
     loader.add_repo("https://github.com/imodels/simgen.git", os.path.join(os.path.split(os.path.dirname(__file__))[0],'..'))
 
     # initialize a project
-    project = Project('https://github.com/imodels/simgen/tests/binary_lj_sim', loader)
+    project = Project('https://github.com/imodels/simgen.git', loader, output_dir=mkdtemp())
 
     program_name = 'binary_lj_sim_prg'
 
@@ -24,6 +25,8 @@ def run():
     generated_code = project.render(ast)
 
     print("Generated code:\n {}".format(generated_code))
+
+    print("Additional files have been saved to: {}".format(project.output_dir))
 
 if __name__ == '__main__':
     run()

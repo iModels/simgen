@@ -1,5 +1,5 @@
 import logging
-
+import os
 from jinja2 import nodes
 from jinja2.ext import Extension
 
@@ -44,6 +44,7 @@ class RedirectExtension(Extension):
 
     def _redirector(self, file_name, ast_node, caller):
         body = caller()
+        file_name = os.path.join(self.environment.globals['output_dir'], file_name)
         with open(file_name, 'w') as f:
             f.write(body)
         return ''

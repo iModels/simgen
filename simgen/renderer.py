@@ -12,12 +12,13 @@ import yaml
 log = logging.getLogger(__file__)
 
 class Renderer(object):
-    def __init__(self, loader, search_path=None):
+    def __init__(self, loader, search_path=None, output_dir=''):
         self.loader = loader
         log.info('Search path: {}'.format(search_path))
         self.search_path=search_path
         self.env = Environment(loader=FileSystemLoader(self.loader.mixed_to_local_path(search_path)), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'simgen.jinjaext.template_path.TemplatePathExtension', 'simgen.jinjaext.mbuild_loader.MbuildLoaderExtension', 'simgen.jinjaext.redirect.RedirectExtension'], trim_blocks=True, cache_size=0)
         self.env.globals['render'] = self._make_render()
+        self.env.globals['output_dir'] = output_dir
 
     def _make_render(self):
         def render(mapping):

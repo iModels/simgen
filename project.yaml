@@ -5,6 +5,4 @@ title: SimGen Test Project
 
 # Specify project search path
 path:
- - https://github.com/iModels/simgen/code
- - https://github.com/iModels/simgen/concepts
- - https://github.com/iModels/simgen/templates/gromacs
+ - https://github.com/imodels/simgen/tests/binary_lj_sim
