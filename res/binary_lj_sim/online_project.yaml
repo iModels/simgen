@@ -1,8 +1,8 @@
 # This is the simgen project configuration file for the test project
 
 # Specify project title
-title: SimGen Test Project
+title: Binary LJ Simulation Test Project
 
 # Specify project search path
 path:
- - https://github.com/imodels/simgen/tests/binary_lj_sim
+ - https://github.com/imodels/simgen/res/binary_lj_sim

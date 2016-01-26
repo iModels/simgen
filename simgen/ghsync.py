@@ -3,6 +3,8 @@ import os
 import re
 from tempfile import mkdtemp
 
+from os import getcwd
+
 from simgen.utils import searchpath
 
 GITHUB_URL_PATTERN = r'https://(?P<domain>.+?)/(?P<owner>.+?)/(?P<repo>.+?)(.git)?(?P<path>/.+)?$'
@@ -283,15 +285,25 @@ class Loader(object):
 
         return local_path
 
-    def find_file(self, file_name, mixed_path, implicit_ext=''):
-        """Given a pathsep-delimited path string or list of directories or github URLs, find seekName.
-        Returns path to seekName if found, otherwise None.
-        Also allows for files with implicit extensions (eg, .exe, or ['.yml','.yaml']),
-        returning the absolute path of the file found.
-        >>> find_file('ls', '/usr/bin:/bin', implicitExt='.exe')
-        '/bin/ls'
-        """
+    def find_file(self, file_name, mixed_path=None, implicit_ext=''):
+        # import pdb; pdb.set_trace()
+        if not mixed_path:
+            mixed_path = []
+
+        if validate_github_url(file_name):
+            # if file_name is an absolute github path, split it into base url and path, prepending mixed_path with base_url
+            repo_url, file_path = split_github_path(file_name)
+            mixed_path.insert(0, repo_url)
+            file_name = file_path[1:]
+        elif file_name.startswith('/'):
+            # if file_name is an absolute local path, split it into dir and file_name, prepending mixed_path with dir
+            abs_dir, file_name = os.path.split(file_name)
+            mixed_path.insert(0, abs_dir)
+
+
         local_path = self.mixed_to_local_path(mixed_path)
+        log.debug('Mixed path is: {}'.format(local_path))
+
         log.debug('Local path is: {}'.format(local_path))
         return searchpath.find_file(file_name, local_path, implicit_ext)
 

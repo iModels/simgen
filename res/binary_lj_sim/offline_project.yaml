@@ -1,0 +1,8 @@
+# This is the simgen project configuration file for the test project
+
+# Specify project title
+title: Binary LJ Simulation Test Project
+
+# Specify project search path
+path:
+ - /Users/sallai/PycharmProjects/simgen/res/binary_lj_sim

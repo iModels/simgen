@@ -1,6 +1,10 @@
-from tempfile import mkdtemp
+import os
 
+from tempfile import mkdtemp
 import pytest
+from os import getcwd
+
+from simgen.ghsync import Loader
 
 
 def test_split_github_path():
@@ -18,8 +22,6 @@ def test_split_github_path():
     assert path is None
 
 def test_loader():
-    import os
-    from simgen.ghsync import Loader
 
     local_root_dir = mkdtemp()
 
@@ -45,4 +47,10 @@ def test_loader():
     local_path = loader3.find_file("project", ["https://github.com/iModels/simgen.git"], implicit_ext=['.yaml', '.yml'])
     assert os.path.realpath(local_path) == os.path.realpath(os.path.join(local_root_dir,'imodels','simgen','project.yaml'))
 
+def test_loader_local():
+    # create a loader
+    loader = Loader()
+    path_to_this_file, this_file_name = os.path.split(__file__)
+    found_file = loader.find_file(file_name=this_file_name, mixed_path = ['./', path_to_this_file])
+    assert os.path.realpath(__file__) == os.path.realpath(found_file)
 

@@ -1,7 +1,10 @@
 import os
 import pprint
+from os.path import dirname
+
 from simgen.astnode import AstNode
 from simgen.ghsync import Loader
+from simgen.project import Project
 from simgen.renderer import Renderer
 
 def build_ethane_box(box, n_molecules):
@@ -14,25 +17,15 @@ def build_ethane_box(box, n_molecules):
 
 def run():
 
-    # create a new offline loader with explicit github url to local directory association
-    loader = Loader()
-    loader.add_repo("https://github.com/imodels/simgen.git", os.path.join(os.path.split(os.path.dirname(__file__))[0],'..'))
-
     ethane_box = build_ethane_box(n_molecules=200, box= [3, 3, 3])
 
-    ast_node = AstNode(file_name='prg', loader=loader, search_path=['https://github.com/imodels/simgen/tests/mbuild_test'])
+    offline_project_manifest = os.path.join(dirname(__file__), '..', '..', 'res', 'mbuild_test', 'offline_project.yaml')
+    project = Project(offline_project_manifest)
 
-    ast_node.inject({'ethane_box': ethane_box})
+    generated_code = project.render('prg', output_dir='generated_code', inject_dict={'ethane_box': ethane_box})
 
-    print('Ast:\n{}'.format(pprint.pformat(ast_node)))
-
-    ast_node.validate()
-
-    renderer = Renderer(loader=loader, search_path=['https://github.com/imodels/simgen/tests/mbuild_test'])
-
-    rendered_code = renderer.render_ast(ast_node)
-
-    print('Rendered code:\n{}'.format(rendered_code))
+    print("Generated code:\n {}".format(generated_code))
+    print("Additional files have been saved to: ./generated_code")
 
 if __name__ == '__main__':
     run()
