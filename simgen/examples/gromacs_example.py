@@ -16,17 +16,13 @@ def run():
     loader.add_repo("https://github.com/imodels/simgen.git", os.path.join(os.path.split(os.path.dirname(__file__))[0],'..'))
 
     # initialize a project
-    project = Project('https://github.com/imodels/simgen.git', loader, output_dir=mkdtemp())
+    project = Project('https://github.com/imodels/simgen.git', loader)
 
-    program_name = 'binary_lj_sim_prg'
-
-    ast = project.load_ast(program_name)
-
-    generated_code = project.render(ast)
+    generated_code = project.render('binary_lj_sim_prg', output_dir='generated_code')
 
     print("Generated code:\n {}".format(generated_code))
 
-    print("Additional files have been saved to: {}".format(project.output_dir))
+    print("Additional files have been saved to: ./generated_code")
 
 if __name__ == '__main__':
     run()

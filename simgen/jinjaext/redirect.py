@@ -3,6 +3,8 @@ import os
 from jinja2 import nodes
 from jinja2.ext import Extension
 
+from simgen.utils import mkdirs
+
 log = logging.getLogger(__file__)
 
 __author__ = 'sallai'
@@ -45,6 +47,7 @@ class RedirectExtension(Extension):
     def _redirector(self, file_name, ast_node, caller):
         body = caller()
         file_name = os.path.join(self.environment.globals['output_dir'], file_name)
+        mkdirs.mkdirs(file_name, exists_ok=True)
         with open(file_name, 'w') as f:
             f.write(body)
         return ''
