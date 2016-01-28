@@ -25,12 +25,19 @@ def test_ast():
 
 def test_render_local():
     # create a new offline loader with explicit github url to local directory association
-    search_path = [os.path.join(dirname(__file__), '..', 'res', 'ast_test')]
+    res_dir = os.path.join(dirname(__file__), '..', 'res', 'ast_test')
 
     loader = Loader()
 
-    ast_node = AstNode(file_name='prg', loader=loader, search_path=search_path)
-    renderer = Renderer(loader, search_path=search_path)
+    manifest = {
+        'title': 'adder',
+        'code_path': [os.path.join(res_dir, 'code')],
+        'concept_path': [os.path.join(res_dir, 'concepts')],
+        'template_path': [os.path.join(res_dir, 'templates')]
+    }
+
+    ast_node = AstNode(file_name='prg', loader=loader, **manifest)
+    renderer = Renderer(loader, **manifest)
 
     rendered_code = renderer.render_ast(ast_node)
 

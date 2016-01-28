@@ -4,5 +4,9 @@
 title: Binary LJ Simulation Test Project
 
 # Specify project search path
-path:
- - https://github.com/imodels/simgen/res/binary_lj_sim
+code_path:
+ - https://github.com/imodels/simgen/res/binary_lj_sim/code
+concept_path:
+ - https://github.com/imodels/simgen/res/binary_lj_sim/concepts
+template_path:
+ - https://github.com/imodels/simgen/res/binary_lj_sim/templates

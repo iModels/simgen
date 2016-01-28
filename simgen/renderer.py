@@ -13,11 +13,17 @@ from six import string_types
 log = logging.getLogger(__file__)
 
 class Renderer(object):
-    def __init__(self, loader, search_path=None, output_dir=''):
+    def __init__(self, loader, code_path=[], template_path=[], concept_path=[], output_dir='', **kwargs):
         self.loader = loader
-        log.info('Search path: {}'.format(search_path))
-        self.search_path=search_path
-        self.env = Environment(loader=FileSystemLoader(self.loader.mixed_to_local_path(search_path)), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'simgen.jinjaext.template_path.TemplatePathExtension', 'simgen.jinjaext.mbuild_loader.MbuildLoaderExtension', 'simgen.jinjaext.redirect.RedirectExtension'], trim_blocks=True, cache_size=0)
+        log.info('template_path: {}'.format(template_path))
+        log.info('concept_path: {}'.format(concept_path))
+        log.info('code_path: {}'.format(code_path))
+
+        self.tempate_path=template_path
+        self.concept_path=concept_path
+        self.code_path=code_path
+
+        self.env = Environment(loader=FileSystemLoader(self.loader.mixed_to_local_path(template_path)), undefined=StrictUndefined, extensions=['jinja2.ext.with_', 'simgen.jinjaext.template_path.TemplatePathExtension', 'simgen.jinjaext.mbuild_loader.MbuildLoaderExtension', 'simgen.jinjaext.redirect.RedirectExtension'], trim_blocks=True, cache_size=0)
         self.env.globals['render'] = self._make_render()
         self.env.globals['output_dir'] = output_dir
 
@@ -36,7 +42,7 @@ class Renderer(object):
 
         # if ast is not an AstNode, convert ast to AstNode
         if not isinstance(ast, AstNode):
-            ast = AstNode(ast, self.loader, self.search_path)
+            ast = AstNode(ast, self.loader, self.concept_path)
 
         # get template
         template = self.env.get_template (ast.nodetype_name+'.jinja')
@@ -46,16 +52,22 @@ class Renderer(object):
         assert rendered_ast is not None
         return rendered_ast
 
-    def render_file(self, file_name, search_path=None):
-        if not search_path:
-            search_path = self.search_path
+    # def render_file(self, file_name, search_path=None):
+    #     if not search_path:
+    #         search_path = self.search_path
+    #
+    #     ast_node = AstNode(file_name=file_name, loader=self.loader, search_path=search_path)
+    #
+    #     return self.render_ast(ast_node)
 
-        ast_node = AstNode(file_name=file_name, loader=self.loader, search_path=search_path)
+    def render_file(self, file_name):
+
+        ast_node = AstNode(file_name=file_name, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path)
 
         return self.render_ast(ast_node)
 
     def render_string(self, ast_yaml_string, search_path=None):
-        ast_node = AstNode(ast_yaml_string, loader=self.loader, search_path=search_path)
+        ast_node = AstNode(ast_yaml_string, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path)
 
         return self.render_ast(ast_node)
 

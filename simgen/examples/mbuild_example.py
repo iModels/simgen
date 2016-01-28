@@ -17,10 +17,18 @@ def build_ethane_box(box, n_molecules):
 
 def run():
 
-    ethane_box = build_ethane_box(n_molecules=200, box= [3, 3, 3])
+    res_dir = os.path.join(dirname(__file__), '..', '..', 'res', 'mbuild_test')
 
-    offline_project_manifest = os.path.join(dirname(__file__), '..', '..', 'res', 'mbuild_test', 'offline_project.yaml')
-    project = Project(offline_project_manifest)
+    manifest = {
+        'title': 'mBuild example',
+        'code_path': [os.path.join(res_dir, 'code')],
+        'concept_path': [os.path.join(res_dir, 'concepts')],
+        'template_path': [os.path.join(res_dir, 'templates')]
+    }
+
+    project = Project(manifest)
+
+    ethane_box = build_ethane_box(n_molecules=200, box= [3, 3, 3])
 
     generated_code = project.render('prg', output_dir='./generated_code', inject_dict={'ethane_box': ethane_box})
 

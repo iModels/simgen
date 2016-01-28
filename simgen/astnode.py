@@ -82,11 +82,11 @@ class AstSyntaxError(Exception):
 
 
 class NodeType(object):
-    def __init__(self, mapping=None, file_name=None, loader=None, search_path=[]):
+    def __init__(self, mapping=None, file_name=None, loader=None, concept_path=[]):
         assert loader is not None
         self.loader = loader
 
-        self.search_path = search_path
+        self.concept_path = concept_path
         if mapping:
             self.file_name = file_name
             self.mapping = mapping
@@ -94,10 +94,10 @@ class NodeType(object):
             assert isinstance(file_name, string_types)
 
             extensions = ['', '.yml', '.yaml']
-            fn = self.loader.find_file(file_name, search_path, extensions)
+            fn = self.loader.find_file(file_name, self.concept_path, extensions)
 
             if not fn:
-                raise IOError('Cannot find file {} in path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), search_path, self.loader.mixed_to_local_path(search_path)))
+                raise IOError('Cannot find concept file {} in concept path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), self.concept_path, self.loader.mixed_to_local_path(self.concept_path)))
 
             with open(fn, 'r') as f:
                 mapping = marked_load(f)
@@ -150,11 +150,12 @@ class NodeType(object):
             return None
 
 class AstNode(object):
-    def __init__(self, mapping=None, file_name=None, loader=None, search_path=[]):
+    def __init__(self, mapping=None, file_name=None, loader=None, code_path=[], concept_path=[], **kwargs):
         assert loader is not None
         self.loader = loader
 
-        self.search_path = search_path
+        self.code_path = code_path
+        self.concept_path = concept_path
         if mapping:
             self.file_name = file_name
             self.mapping = mapping
@@ -162,10 +163,10 @@ class AstNode(object):
             assert isinstance(file_name, string_types)
 
             extensions = ['', '.yml', '.yaml']
-            fn = self.loader.find_file(file_name, search_path, extensions)
+            fn = self.loader.find_file(file_name, self.code_path, extensions)
 
             if not fn:
-                raise IOError('Cannot find file {} in path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), search_path, self.loader.mixed_to_local_path(search_path)))
+                raise IOError('Cannot find Ast file {} in code path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), self.code_path, self.loader.mixed_to_local_path(self.code_path)))
 
             with open(fn, 'r') as f:
                 mapping = safe_load(f)
@@ -230,7 +231,7 @@ class AstNode(object):
 
     def validate(self):
 
-        self.nodetype = NodeType(file_name=self.nodetype_name, loader=self.loader, search_path=self.search_path)
+        self.nodetype = NodeType(file_name=self.nodetype_name, loader=self.loader, concept_path=self.concept_path)
 
         # check existence of required attrs
         for req_property_name in self.nodetype.required_properties:
@@ -268,13 +269,13 @@ class AstNode(object):
         for property_name in self.properties:
             # recurse if it's a dict
             if isinstance(self.get_property(property_name), dict):
-                ast = AstNode(mapping=self.get_property(property_name), loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                ast = AstNode(mapping=self.get_property(property_name), loader=self.loader, code_path=self.code_path, concept_path=self.concept_path, file_name=self.file_name)
                 ast.validate()
             # recurs if it's a list containing dists
             if isinstance(self.get_property(property_name), collections.Iterable):
                 for list_item in self.get_property(property_name):
                     if isinstance(list_item, dict):
-                        ast = AstNode(mapping=list_item, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                        ast = AstNode(mapping=list_item, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path, file_name=self.file_name)
                         ast.validate()
 
         return True
@@ -297,14 +298,14 @@ class AstNode(object):
                         self.set_property(property_name, mapping[name])
             # recurse if value is a dict
             if isinstance(value, dict):
-                ast = AstNode(mapping=value, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                ast = AstNode(mapping=value, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path, file_name=self.file_name)
                 ast.inject(mapping)
 
             # if the value is a list, try recursing into the items
             if isinstance(value, collections.Iterable):
                 for list_item in value:
                     if isinstance(list_item, dict):
-                        ast = AstNode(mapping=list_item, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                        ast = AstNode(mapping=list_item, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path, file_name=self.file_name)
                         ast.inject(mapping)
 
 

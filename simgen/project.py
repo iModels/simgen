@@ -39,7 +39,9 @@ class Project(object):
         # get path, title, etc. from mapping
         assert isinstance(mapping, dict)
         self.title = mapping['title']
-        self.mixed_search_path = mapping['path']
+        self.code_path = mapping['code_path']
+        self.concept_path = mapping['concept_path']
+        self.template_path = mapping['template_path']
 
     def _load_manifest(self, manifest_filename):
         implicit_exts = ['', '.yaml', '.yml']
@@ -57,7 +59,7 @@ class Project(object):
         log.debug('Loading ast from file: {}'.format(file_name))
 
         # load ast
-        ast = AstNode(file_name=file_name, loader=self.loader, search_path=self.mixed_search_path)
+        ast = AstNode(file_name=file_name, loader=self.loader, code_path=self.code_path, concept_path=self.concept_path)
         log.debug("Ast loaded: {}".format(ast))
 
         # inject values from inject_dict to replace placeholders in ast
@@ -79,7 +81,7 @@ class Project(object):
             ast.inject(inject_dict)
             ast.validate()
 
-        self.renderer = Renderer(self.loader, search_path=self.mixed_search_path, output_dir=output_dir)
+        self.renderer = Renderer(self.loader, output_dir=output_dir, code_path=self.code_path, concept_path=self.concept_path, template_path=self.template_path)
         rendered_code = self.renderer.render_ast(ast)
         return rendered_code
 

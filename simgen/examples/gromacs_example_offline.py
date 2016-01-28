@@ -9,9 +9,16 @@ from simgen.project import Project
 
 
 def run():
+    res_dir = os.path.join(dirname(__file__), '..', '..', 'res', 'binary_lj_sim')
 
-    offline_project_manifest = os.path.join(dirname(__file__), '..', '..', 'res', 'binary_lj_sim', 'offline_project.yaml')
-    project = Project(offline_project_manifest)
+    manifest = {
+        'title': 'Binary LJ Simulation',
+        'code_path': [os.path.join(res_dir, 'code')],
+        'concept_path': [os.path.join(res_dir, 'concepts')],
+        'template_path': [os.path.join(res_dir, 'templates')]
+    }
+
+    project = Project(manifest)
 
     generated_code = project.render('binary_lj_sim_prg', output_dir='generated_code')
 
