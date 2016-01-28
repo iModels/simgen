@@ -1,4 +1,5 @@
 import logging
+import pprint
 
 from astnode import AstNode
 from simgen.utils.marked_yaml import marked_load
@@ -26,6 +27,9 @@ class Renderer(object):
         return render
 
     def render_ast(self, ast):
+
+        log.debug("Render_ast called with:\n{}".format(pprint.pformat(ast)))
+
         # for primitive types, convert to string
         if isinstance(ast, (basestring, float, int)):
             return str(ast)

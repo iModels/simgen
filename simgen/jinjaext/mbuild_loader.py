@@ -51,8 +51,10 @@ class MbuildLoaderExtension(Extension):
             mkdirs.mkdirs(system_name, exists_ok=True)
             compound.save(system_name, forcefield=forcefield, overwrite=True)
         else:
-            import pdb; pdb.set_trace()
-            raise TemplateSyntaxError("Context is not an mBuild Compound.")
+            if isinstance(compound, basestring) and re.match(r'^\s*\{\{\s*\w+\s*\}\}\s*$', compound, 0):
+                raise TemplateSyntaxError("Context is not an mBuild Compound, but '{}'".format(compound), lineno=0)
+            else:
+                raise TemplateSyntaxError("Context is not an mBuild Compound, but of type {}".format(type(compound)), lineno=0)
 
         return ''
 
