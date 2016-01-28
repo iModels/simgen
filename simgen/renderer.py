@@ -1,13 +1,13 @@
 import logging
 
-from astnode import AstNode
+from simgen.astnode import AstNode
 from simgen.utils.marked_yaml import marked_load
 
-__author__ = 'sallai'
 
 from jinja2.runtime import StrictUndefined
 from jinja2 import Environment, FileSystemLoader
 import yaml
+from six import string_types
 
 log = logging.getLogger(__file__)
 
@@ -27,7 +27,7 @@ class Renderer(object):
 
     def render_ast(self, ast):
         # for primitive types, convert to string
-        if isinstance(ast, (basestring, float, int)):
+        if isinstance(ast, (string_types, float, int)):
             return str(ast)
 
         # if ast is not an AstNode, convert ast to AstNode

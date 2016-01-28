@@ -13,7 +13,9 @@ _PATTERN = re.compile(GITHUB_URL_PATTERN)
 
 log = logging.getLogger(__file__)
 
-class Error(Exception): pass
+
+class Error(Exception):
+    pass
 
 
 # def _sync_repo(local_root_dir, repo_org, repo_name, parent_repo_org=None, parent_repo_name=None):

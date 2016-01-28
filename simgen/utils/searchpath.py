@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 from os import pathsep
 
@@ -48,6 +50,6 @@ if __name__ == '__main__':
    search_path = 'c:/cygwin/bin' + pathsep + 'c:/cygwin/usr/bin'  # ; on windows, : on unix
    fn = find_file('ls', search_path, implicitExt=['.exe'])
    if fn:
-      print "File found at %s" % fn
+      print("File found at %s" % fn)
    else:
-      print "File not found"
+      print("File not found")

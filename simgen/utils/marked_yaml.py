@@ -20,10 +20,15 @@ from yaml.resolver import Resolver
 from yaml.parser import Parser
 from yaml.constructor import Constructor, BaseConstructor, SafeConstructor
 
+from six import PY2
+
+if not PY2:
+    unicode = str
+
 def create_node_class(cls):
     class node_class(cls):
         def __init__(self, x, start_mark, end_mark):
-            if cls!=unicode:
+            if cls != unicode:
                 cls.__init__(self, x)
             self.start_mark = start_mark
             self.end_mark = end_mark
