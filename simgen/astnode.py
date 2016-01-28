@@ -3,6 +3,8 @@ import os
 import re
 from pprint import pformat
 
+from six import string_types
+
 from simgen.utils.dict_merge import data_merge
 from simgen.utils.marked_yaml import marked_load as safe_load, marked_load
 
@@ -89,7 +91,7 @@ class NodeType(object):
             self.file_name = file_name
             self.mapping = mapping
         else:
-            assert isinstance(file_name, basestring)
+            assert isinstance(file_name, string_types)
 
             extensions = ['', '.yml', '.yaml']
             fn = self.loader.find_file(file_name, search_path, extensions)
@@ -97,7 +99,7 @@ class NodeType(object):
             if not fn:
                 raise IOError('Cannot find file {} in path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), search_path, self.loader.mixed_to_local_path(search_path)))
 
-            with file(fn, 'r') as f:
+            with open(fn, 'r') as f:
                 mapping = marked_load(f)
                 nodetype_name = os.path.basename(fn)
                 nodetype_name = nodetype_name.split('.')[0]
@@ -157,7 +159,7 @@ class AstNode(object):
             self.file_name = file_name
             self.mapping = mapping
         else:
-            assert isinstance(file_name, basestring)
+            assert isinstance(file_name, string_types)
 
             extensions = ['', '.yml', '.yaml']
             fn = self.loader.find_file(file_name, search_path, extensions)
@@ -165,7 +167,7 @@ class AstNode(object):
             if not fn:
                 raise IOError('Cannot find file {} in path {} (local path:{})'.format("{}[{}]".format(file_name, '|'.join(extensions)), search_path, self.loader.mixed_to_local_path(search_path)))
 
-            with file(fn, 'r') as f:
+            with open(fn, 'r') as f:
                 mapping = safe_load(f)
 
             self.file_name = fn
@@ -243,7 +245,7 @@ class AstNode(object):
             value = self.get_property(property_name)
 
             # check if value is a placeholder, in the format of '{{ placeholder_name }}'
-            if (isinstance(value, basestring) and re.match(r'^\s*\{\{\s*\w+\s*\}\}\s*$', value, 0)):
+            if (isinstance(value, string_types) and re.match(r'^\s*\{\{\s*\w+\s*\}\}\s*$', value, 0)):
                 # it's a placeholder, so don't do type checking
                 continue
 
@@ -282,7 +284,7 @@ class AstNode(object):
             value = self.get_property(property_name)
 
             # check if value is a placeholder, in the format of '{{ placeholder_name }}'
-            if isinstance(value, basestring):
+            if isinstance(value, string_types):
                 result = _PATTERN.match(value)
                 if result:
                     # it's a placeholder

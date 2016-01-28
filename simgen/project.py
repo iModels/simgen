@@ -1,15 +1,18 @@
 import logging
 
-from astnode import AstNode
-from ghsync import Loader
-from renderer import Renderer
+from simgen.astnode import AstNode
+from simgen.ghsync import Loader
+from simgen.renderer import Renderer
 from simgen.utils.marked_yaml import marked_load
 
-__author__ = 'sallai'
+from six import string_types
 
 log = logging.getLogger(__file__)
 
-class Error(Exception): pass
+
+class Error(Exception):
+    pass
+
 
 class Project(object):
     def __init__(self, manifest_filename_or_mapping, loader=None):
@@ -24,7 +27,7 @@ class Project(object):
         else:
             self.loader = Loader()
 
-        if isinstance(manifest_filename_or_mapping, basestring):
+        if isinstance(manifest_filename_or_mapping, string_types):
             # we got a manifest file name, one of
             #  local filename
             #  github path in the form of https://github.com/owner/repo/some/path/to/project.yml
@@ -68,7 +71,7 @@ class Project(object):
         return ast
 
     def render(self, ast_or_filename, output_dir='', inject_dict=None, validation=True):
-        if isinstance(ast_or_filename, basestring):
+        if isinstance(ast_or_filename, string_types):
             ast = self.load_ast(ast_or_filename, inject_dict=inject_dict, validation=validation)
         else:
             ast = ast_or_filename

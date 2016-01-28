@@ -34,7 +34,7 @@ def data_merge(a, b):
                 raise MergeError('Cannot merge non-dict "%s" into dict "%s"' % (b, a))
         else:
             raise MergeError('NOT IMPLEMENTED "%s" into "%s"' % (b, a))
-    except TypeError, e:
+    except TypeError as e:
         raise MergeError('TypeError "%s" in key "%s" when merging "%s" into "%s"' % (e, key, b, a))
     return a
 
