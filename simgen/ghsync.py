@@ -224,8 +224,8 @@ class Loader(object):
             else:
                 # do a clone
                 print('Cloning repo: {}/{}'.format(repo_org, repo_name))
-                os.system('git clone git@github.com:{}/{}.git'.format(repo_org, repo_name))
-                print ('git clone git@github.com:{}/{}.git'.format(repo_org, repo_name))
+                os.system('git clone https://github.com/{}/{}.git'.format(repo_org, repo_name))
+                print ('git clone https://github.com/{}/{}.git'.format(repo_org, repo_name))
                 os.chdir(repo_name)
 
             local_repo_path = os.getcwd()

@@ -102,7 +102,7 @@ class NodeType(object):
                 mapping = marked_load(f)
                 nodetype_name = os.path.basename(fn)
                 nodetype_name = nodetype_name.split('.')[0]
-                if mapping.has_key('name'):
+                if 'name' in mapping:
                     if mapping['name'] != nodetype_name:
                         raise NodeTypeSyntaxError("Name attribute does not match file name: {} != {}".format(mapping['name'], nodetype_name), filename=fn)
                 else:
@@ -143,7 +143,7 @@ class NodeType(object):
 
     def get_property_items_type(self, p):
         """Get the type of property p"""
-        if self.mapping['properties'][p].has_key('items'):
+        if 'items' in self.mapping['properties'][p]:
             return self.mapping['properties'][p]['items']
         else:
             return None
@@ -178,7 +178,9 @@ class AstNode(object):
 
     @property
     def nodetype_name(self):
-        return self.mapping.keys().pop(0)
+        # There should only ever be one key.
+        for key in self.mapping.keys():
+            return key
 
     @property
     def properties(self):
@@ -199,15 +201,15 @@ class AstNode(object):
         for typename in typename_list:
             # check primitive types
             if ((typename == 'object') or
-                        (typename == 'integer' and isinstance(value, (int, long))) or
-                        (typename == 'number' and isinstance(value, (int, long, float))) or
+                        (typename == 'integer' and isinstance(value, int)) or
+                        (typename == 'number' and isinstance(value, (int, float))) or
                         (typename == 'boolean' and isinstance(value, bool)) or
-                        (typename == 'string' and isinstance(value, basestring))
+                        (typename == 'string' and isinstance(value, string_types))
             ):
                 type_match = True
                 break
             # check user defined types
-            elif isinstance(value, dict) and value.has_key(typename):
+            elif isinstance(value, dict) and typename in value:
                 type_match = True
                 break
             elif typename == 'list' and isinstance(value, list):

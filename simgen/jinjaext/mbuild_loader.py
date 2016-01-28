@@ -51,8 +51,7 @@ class MbuildLoaderExtension(Extension):
             mkdirs.mkdirs(system_name, exists_ok=True)
             compound.save(system_name, forcefield=forcefield, overwrite=True)
         else:
-            import pdb; pdb.set_trace()
-            raise TemplateSyntaxError("Context is not an mBuild Compound.")
+            raise TemplateSyntaxError("Context is not an mBuild Compound.", 0)
 
         return ''
 
