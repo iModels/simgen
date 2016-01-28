@@ -4,6 +4,7 @@ from jinja2.exceptions import TemplateNotFound, TemplateSyntaxError
 import yaml
 
 from simgen.utils import mkdirs
+from six import string_types
 
 __author__ = 'sallai'
 from jinja2 import nodes
@@ -51,7 +52,10 @@ class MbuildLoaderExtension(Extension):
             mkdirs.mkdirs(system_name, exists_ok=True)
             compound.save(system_name, forcefield=forcefield, overwrite=True)
         else:
-            raise TemplateSyntaxError("Context is not an mBuild Compound.", 0)
+            if isinstance(compound, string_types) and re.match(r'^\s*\{\{\s*\w+\s*\}\}\s*$', compound, 0):
+                raise TemplateSyntaxError("Context is not an mBuild Compound, but '{}'".format(compound), lineno=0)
+            else:
+                raise TemplateSyntaxError("Context is not an mBuild Compound, but of type {}".format(type(compound)), lineno=0)
 
         return ''
 

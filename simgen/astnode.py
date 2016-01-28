@@ -1,3 +1,4 @@
+import collections
 import os
 import re
 from pprint import pformat
@@ -212,7 +213,7 @@ class AstNode(object):
             elif isinstance(value, dict) and typename in value:
                 type_match = True
                 break
-            elif typename == 'list' and isinstance(value, list):
+            elif typename == 'list' and isinstance(value, collections.Iterable):
                 if not listitem_typesnames:
                     # untyped list
                     type_match = True
@@ -261,13 +262,21 @@ class AstNode(object):
                 typename_list = [typename_list]
 
             if not self.is_instance(value, typename_list, listitem_typenames):
-                raise AstSyntaxError('Type of parameter {} is not {}'.format(property_name, typename_list), filename=self.file_name, lineno=property_name.start_mark.line)
+                raise AstSyntaxError('Type of parameter {} is not {}, but {}'.format(property_name, typename_list, type(value)), filename=self.file_name, lineno=property_name.start_mark.line)
 
         # recurse
         for property_name in self.properties:
+            # recurse if it's a dict
             if isinstance(self.get_property(property_name), dict):
                 ast = AstNode(mapping=self.get_property(property_name), loader=self.loader, search_path=self.search_path, file_name=self.file_name)
                 ast.validate()
+            # recurs if it's a list containing dists
+            if isinstance(self.get_property(property_name), collections.Iterable):
+                for list_item in self.get_property(property_name):
+                    if isinstance(list_item, dict):
+                        ast = AstNode(mapping=list_item, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                        ast.validate()
+
         return True
 
     def inject(self, mapping):
@@ -286,6 +295,18 @@ class AstNode(object):
                     # replace placeholder with
                     if name in mapping:
                         self.set_property(property_name, mapping[name])
+            # recurse if value is a dict
+            if isinstance(value, dict):
+                ast = AstNode(mapping=value, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                ast.inject(mapping)
+
+            # if the value is a list, try recursing into the items
+            if isinstance(value, collections.Iterable):
+                for list_item in value:
+                    if isinstance(list_item, dict):
+                        ast = AstNode(mapping=list_item, loader=self.loader, search_path=self.search_path, file_name=self.file_name)
+                        ast.inject(mapping)
+
 
 
     def __repr__(self):
