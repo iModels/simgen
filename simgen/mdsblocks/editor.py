@@ -54,16 +54,20 @@ class Editor(object):
     def show(self):
         # save a reference to the current editor object
         id_to_editor_map[id(self)] = self
-        frame = """<iframe width="99%" height="1000" src="/nbextensions/mdsblocks/index.html">
-                <script language="text/javascript">
-                    window.IPY_VARS = {{
-                        OAUTH_TOKEN: {token},
-                        DEFAULT_PROJECT: "{repo}",
-                        EDITOR_ID: "{id}"
-                    }};
-                </script>
-            </iframe>"""
+        frame = """<script language="text/javascript">
+                        window.IPY_VARS = {{
+                            OAUTH_TOKEN: "{token}",
+                            DEFAULT_PROJECT: "{repo}",
+                            EDITOR_ID: "{id}"
+                        }};
+
+                        console.log('hello!!!!!!!!!');
+                        console.log(window.IPY_VARS.OAUTH_TOKEN);
+                    </script>
+                    <iframe width="99%" height="1000" src="/nbextensions/mdsblocks/frame.html">"""
 
         frame = frame.format(token=self.githubToken, repo=self.repoUrl, id=id(self))
+
+        print(frame)
 
         return HTML(frame)

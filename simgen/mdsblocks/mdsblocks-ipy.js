@@ -3,6 +3,8 @@ function onIPyHook(editor) {
 
     var token = browserWindow.IPY_VARS.OAUTH_TOKEN;
 
+    console.log('onIPyHook: token=' + browserWindow.IPY_VARS.OAUTH_TOKEN)
+
     if(token) {
         editor.github.login({token: token});
         console.log('token is', token);
