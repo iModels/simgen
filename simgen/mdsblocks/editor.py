@@ -61,13 +61,10 @@ class Editor(object):
                             EDITOR_ID: "{id}"
                         }};
 
-                        console.log('hello!!!!!!!!!');
                         console.log(window.IPY_VARS.OAUTH_TOKEN);
                     </script>
                     <iframe width="99%" height="1000" src="/nbextensions/mdsblocks/frame.html">"""
 
         frame = frame.format(token=self.githubToken, repo=self.repoUrl, id=id(self))
-
-        print(frame)
 
         return HTML(frame)
