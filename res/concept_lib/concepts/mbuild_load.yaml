@@ -1,0 +1,11 @@
+description: "loads an mbuild compound"
+properties:
+  compound:
+      type: string
+  arguments:
+      description: "list of constructor arguments"
+      type: list
+      items:
+        type: [ argument ]
+      default: []
+required: [compound]

@@ -22,7 +22,10 @@ function onIPyHook(editor) {
     var IPython = browserWindow.IPython;
 
     // hook on 'save' action
+    var oldOnClick = document.getElementById('save').onclick;
     document.getElementById('save').onclick = function(e) {
+        oldOnClick();
+
         // create a command that
         // 1. gets the editor_id to editor mapping from the module scope
         // 2. makes editor_<editor_id> assigned to the python editor object

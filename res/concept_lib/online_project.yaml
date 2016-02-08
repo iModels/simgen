@@ -1,0 +1,12 @@
+# This is the simgen project configuration file for the test project
+
+# Specify project title
+title: Concept Test Project
+
+# Specify project search path
+code_path:
+ - https://github.com/imodels/simgen/res/concept_lib/code
+concept_path:
+ - https://github.com/imodels/simgen/res/concept_lib/concepts
+template_path:
+ - https://github.com/imodels/simgen/res/concept_lib/templates
