@@ -1,15 +1,25 @@
-function onIPyHook(editor) {
-    var browserWindow = window.parent.parent;
+function onIPyHook() {
+    var browserWindow = window.parent.parent,
+        token = browserWindow.IPY_VARS.OAUTH_TOKEN,
+        auth = token ? {token: token} : undefined;
 
-    var token = browserWindow.IPY_VARS.OAUTH_TOKEN;
+    console.log('token is', token);
+    window.OAUTH_TOKEN = token;
 
     console.log('onIPyHook: token=' + browserWindow.IPY_VARS.OAUTH_TOKEN)
 
-    if(token) {
-        editor.github.login({token: token});
-        console.log('token is', token);
-        window.OAUTH_TOKEN = token;
-    }
+    // Create the editor...
+    var editor = new MDSEditor({
+        openProjectBtn: document.getElementById('open-project'),
+        loginBtn: document.getElementById('login'),
+        logoutBtn: document.getElementById('logout'),
+        auth: auth
+    });
+
+    // Download, Save buttons
+    document.getElementById('download').onclick = editor.downloadActiveWorkspace.bind(editor);
+    document.getElementById('save').onclick = editor.saveProject.bind(editor);
+    document.getElementById('toggle-editor').onclick = editor.toggleCodeEditor.bind(editor);
 
     var repo = browserWindow.IPY_VARS.DEFAULT_PROJECT;
     if(repo) {
