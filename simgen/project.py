@@ -85,3 +85,17 @@ class Project(object):
         rendered_code = self.renderer.render_ast(ast)
         return rendered_code
 
+
+    def render_tasks(self, ast_or_filename, output_dir='', inject_dict=None, validation=True):
+
+        gen_code = self.render(ast_or_filename, output_dir, inject_dict, validation)
+        run_script = []
+        for line in gen_code.split("\n"):
+            if line.strip().startswith("#"):
+                continue
+            elif not line.strip():
+                continue
+            else:
+                run_script.append(line.strip())
+
+        return run_script
